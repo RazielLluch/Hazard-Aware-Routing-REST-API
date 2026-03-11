@@ -1,0 +1,99 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.whl
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff (if using)
+*.log
+local_settings.py
+db.sqlite3
+
+# FastAPI / general Python
+instance/
+.webassets-cache
+
+# PyCharm / JetBrains IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+.idea/*/workspace.xml
+.idea/*/tasks.xml
+.idea/*/usage.statistics.xml
+.idea/*/dictionaries
+.idea/*/shelf
+.idea/*/gradle.xml
+.idea/*/modules.xml
+.idea/*/vcs.xml
+.idea/*/dataSources/
+.idea/*/dataSources.ids
+.idea/*/dataSources.local.xml
+.idea/*/sqlDataSources.xml
+.idea/*/dynamic.xml
+.idea/*/uiDesigner.xml
+.idea/*/assetWizardSettings.xml
+.idea/*/libraries/
+.idea/*/caches/
+.idea/*/sbt_settings.xml
+.idea/*/runConfigurations/
+.idea/*
+
+# VS Code (optional, if used)
+.vscode/
+
+# Mac / Linux / Windows system files
+.DS_Store
+Thumbs.db
+desktop.ini
