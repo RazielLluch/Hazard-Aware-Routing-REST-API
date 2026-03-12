@@ -90,6 +90,8 @@ out/
 .idea/*/runConfigurations/
 .idea/*
 
+.env
+
 # VS Code (optional, if used)
 .vscode/
 
