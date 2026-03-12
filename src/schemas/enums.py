@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class RouteType(str, Enum):
+class RoutingProfile(str, Enum):
     SAFE = "safe"
     BALANCED = "balanced"
     FAST = "fast"

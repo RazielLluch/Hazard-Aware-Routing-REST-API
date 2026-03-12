@@ -1,8 +1,8 @@
 from pydantic import field_validator
-from model import Model
+from .model import Model
 from uuid import UUID
 from typing import List, Optional
-from ..schemas.enums import RouteType, RainIntensity
+from ..schemas.enums import RoutingProfile, RainIntensity
 
 
 class Coordinate(Model):
@@ -23,7 +23,7 @@ class Coordinate(Model):
 
 
 class RouteSegment(Model):
-    id: str
+    id: Optional[str] = None
     coordinates: List[Coordinate]
     distance_meters: Optional[float] = None
     travel_time_seconds: Optional[float] = None
@@ -31,7 +31,7 @@ class RouteSegment(Model):
 
 
 class DeliveryStop(Model):
-    id: str
+    id: Optional[str] = None
     location: Coordinate
     sequence: Optional[int] = None
     label: Optional[str] = None
@@ -44,14 +44,15 @@ class DeliveryStop(Model):
 
 
 class RouteRequestModel(Model):
-    id: UUID
-    delivery_stops: List[DeliveryStop]
     rain_intensity: RainIntensity
-    route_type: RouteType
+    routing_profile: RoutingProfile
+    delivery_stops: List[DeliveryStop]
 
     @classmethod
     @field_validator("delivery_stops")
     def validate_delivery_stops(cls, stops):
+        if len(stops) < 2:
+            raise ValueError("Delivery stops must have at least 2 items")
         count = sum(1 for stop in stops if stops.sequence == 1)
         if count > 1:
             raise ValueError("Cannot have multiple depots(delivery stops with sequence number 1)")
@@ -61,10 +62,9 @@ class RouteRequestModel(Model):
 
 class RouteResponseModel(Model):
     id: UUID
-    type: RouteType
+    rain_intensity: RainIntensity
+    routing_profile: RoutingProfile
     segments: List[RouteSegment]
-
-    depot: Coordinate
     delivery_stops: List[DeliveryStop]
 
     total_distance_meters: Optional[float] = None
