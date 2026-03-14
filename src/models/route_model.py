@@ -14,12 +14,14 @@ class Coordinate(Model):
     def validate_lat(cls, latitude):
         if latitude < -90 or latitude > 90:
             raise ValueError("Latitude must be between -90 and 90")
+        return latitude
 
     @classmethod
     @field_validator("lng")
     def validate_lng(cls, longitude):
         if longitude < -180 or longitude > 180:
             raise ValueError("Longitude must be between -180 and 180")
+        return longitude
 
 
 class RouteSegment(Model):
@@ -41,6 +43,7 @@ class DeliveryStop(Model):
     def validate_sequence(cls, sequence):
         if sequence < 1:
             raise ValueError("Sequence must be greater than 1")
+        return sequence
 
 
 class RouteRequestModel(Model):
@@ -53,11 +56,12 @@ class RouteRequestModel(Model):
     def validate_delivery_stops(cls, stops):
         if len(stops) < 2:
             raise ValueError("Delivery stops must have at least 2 items")
-        count = sum(1 for stop in stops if stops.sequence == 1)
+        count = sum(1 for stop in stops if stop.sequence == 1)
         if count > 1:
             raise ValueError("Cannot have multiple depots(delivery stops with sequence number 1)")
         elif count < 1:
             raise ValueError("Cannot have no depots(0 delivery stops)")
+        return stops
 
 
 class RouteResponseModel(Model):
@@ -74,13 +78,15 @@ class RouteResponseModel(Model):
     @classmethod
     @field_validator("segments")
     def validate_segments(cls, segments: List[RouteSegment]):
-        for i, segment in enumerate(segments):
-            if i == 0:
-                continue  # no previous element
-
+        for i in range(1, len(segments)):
             prev = segments[i - 1]
+            curr = segments[i]
 
-            if prev.sequence != segment.sequence:
-                raise ValueError("Route node mismatch!")
+            prev_end = prev.coordinates[-1]
+            curr_start = curr.coordinates[0]
 
+            if prev_end != curr_start:
+                raise ValueError("Route segments are not continuous")
+
+        return segments
 
