@@ -113,7 +113,7 @@ def randomize_delivery_stops(stops: List[DeliveryStop]):
 
     random.shuffle(sequence)
 
-    for i in range(1, len(stops)):
+    for i in range(0, len(stops)):
         stops[i].sequence = sequence[i-1]
 
     return stops

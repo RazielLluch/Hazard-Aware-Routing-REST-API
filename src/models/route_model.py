@@ -2,7 +2,7 @@ from pydantic import field_validator
 from .model import Model
 from uuid import UUID
 from typing import List, Optional
-from ..schemas.enums import RoutingProfile, RainIntensity
+from ..schemas.enums import RouteType, RainIntensity
 
 
 class Coordinate(Model):
@@ -47,8 +47,9 @@ class DeliveryStop(Model):
 
 
 class RouteRequestModel(Model):
-    rain_intensity: RainIntensity
-    routing_profile: RoutingProfile
+    rain_intensity: RainIntensity = RainIntensity.RI1
+    route_type: RouteType = RouteType.BALANCED
+    depot: DeliveryStop
     delivery_stops: List[DeliveryStop]
 
     @classmethod
@@ -67,7 +68,8 @@ class RouteRequestModel(Model):
 class RouteResponseModel(Model):
     id: UUID
     rain_intensity: RainIntensity
-    routing_profile: RoutingProfile
+    type: RouteType
+    depot: DeliveryStop
     segments: List[RouteSegment]
     delivery_stops: List[DeliveryStop]
 

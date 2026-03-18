@@ -45,21 +45,24 @@ def generate_mock_routes(request: RouteRequestModel):
 
     processed_segments: List[RouteSegment] = []
 
+    processed_segments.append(generate_segment(request.depot, stops[0]))
+
     for i in range(1, len(stops)):
         processed_segments.append(generate_segment(stops[i-1], stops[i]))
 
     print("processed_segments: ", processed_segments)
 
-    routes = RouteResponseModel(
-        id=uuid4(),
-        rain_intensity=request.rain_intensity,
-        routing_profile=request.routing_profile,
-        segments=processed_segments,
-        delivery_stops=stops,
-        total_distance_meters=0,
-        total_travel_time_seconds=0,
-        average_hazard_score=0
-    )
+    routes = {
+        "id": uuid4(),
+        "rain_intensity": request.rain_intensity,
+        "type": request.route_type,
+        "depot": request.depot,
+        "segments": processed_segments,
+        "delivery_stops": stops,
+        "total_distance_meters": 0,
+        "total_travel_time_seconds": 0,
+        "average_hazard_score": 0
+    }
 
     return routes
 
