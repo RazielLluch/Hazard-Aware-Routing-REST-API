@@ -2,6 +2,8 @@ import uuid
 
 from src.models.route_model import RouteResponseModel, RouteRequestModel
 from fastapi import APIRouter, Body, Depends, HTTPException, status, Path, Response
+
+from ..services.inference import inference
 from ..services.mock_data import generate_mock_routes
 
 api_router = APIRouter()
@@ -23,6 +25,6 @@ async def generate_route(
         request: RouteRequestModel
 ):
 
-    response = generate_mock_routes(request)
-
+    # response = generate_mock_routes(request)
+    response = inference(request)
     return response

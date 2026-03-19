@@ -1,6 +1,6 @@
-from pydantic import field_validator
+from pydantic import field_validator, Field
 from .model import Model
-from uuid import UUID
+from uuid import UUID, uuid4
 from typing import List, Optional
 from ..schemas.enums import RouteType, RainIntensity
 
@@ -47,6 +47,7 @@ class DeliveryStop(Model):
 
 
 class RouteRequestModel(Model):
+    id: UUID = Field(default_factory=uuid4)
     rain_intensity: RainIntensity = RainIntensity.RI1
     route_type: RouteType = RouteType.BALANCED
     depot: DeliveryStop
@@ -67,8 +68,8 @@ class RouteRequestModel(Model):
 
 class RouteResponseModel(Model):
     id: UUID
-    rain_intensity: RainIntensity
     type: RouteType
+    rain_intensity: RainIntensity
     depot: DeliveryStop
     segments: List[RouteSegment]
     delivery_stops: List[DeliveryStop]

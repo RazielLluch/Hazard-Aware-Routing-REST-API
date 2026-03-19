@@ -97,7 +97,8 @@ def process_stops(stops: List[DeliveryStop]) -> List[DeliveryStop]:
         coordinate = Coordinate(lng=node['x'], lat=node['y'])
         delivery_stop = DeliveryStop(
             location=coordinate,
-            sequence=1 if i == 0 else None
+            sequence=1 if i == 0 else None,
+            label=stop.label,
         )
 
         processed_stops.append(delivery_stop)
@@ -109,9 +110,11 @@ def process_stops(stops: List[DeliveryStop]) -> List[DeliveryStop]:
 
 def randomize_delivery_stops(stops: List[DeliveryStop]):
 
-    sequence = list(range(2, len(stops)+1))
+    sequence = list(range(1, len(stops)+1))
 
     random.shuffle(sequence)
+
+    print("Randomized DELIVERY STOPS: ", sequence)
 
     for i in range(0, len(stops)):
         stops[i].sequence = sequence[i-1]
