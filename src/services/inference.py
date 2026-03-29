@@ -19,6 +19,7 @@ import torch
 
 import src.services.rl_routing_wCUDA_wCheckP as rl
 from src.models.route_model import RouteRequestModel, DeliveryStop
+from src.schemas.enums import RouteType, RainIntensity
 
 
 def haversine_m(lon1: float, lat1: float, lon2: float, lat2: float) -> float:
@@ -344,33 +345,35 @@ def to_route_response(request: RouteRequestModel, env: rl.HazardRoutingEnv, infe
     }
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Barebones RL-to-visualization integration demo.")
-    parser.add_argument("--config-path", type=str, default="sample_config_200.json", help="Path to training config JSON.")
-    parser.add_argument("--checkpoint-path", type=str, default="Models/stage_200_RI1/best_model.pt", help="Path to model checkpoint (.pt).")
-    parser.add_argument(
-        "--request-json",
-        type=str,
-        default="",
-        help="Optional request JSON file. If omitted, auto-generates a mock request from graph nodes.",
+def get_model(route_type: RouteType, rain_intensity: RainIntensity) -> Path:
+    base_dir = Path("ml_models/latest")
+
+    # Normalize inputs (in case enums are used)
+    route = route_type.value if hasattr(route_type, "value") else str(route_type)
+    rain = rain_intensity.value if hasattr(rain_intensity, "value") else str(rain_intensity)
+
+    model_path = (
+            base_dir
+            / f"{route}_HF"
+            / f"stage_200_{route}_HF_{rain}_det"
+            / "best_model.pt"
     )
-    parser.add_argument("--rain-intensity", type=str, default="RI1", help="Used when auto-generating request.")
-    parser.add_argument("--route-type", type=str, default="balanced", help="safe|balanced|fast (currently informational).")
-    parser.add_argument("--epsilon", type=float, default=0.0, help="Inference epsilon; use 0.0 for deterministic policy.")
-    parser.add_argument("--output-json", type=str, default="", help="Optional output JSON file path.")
-    return parser.parse_args()
+
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model not found: {model_path}")
+
+    return model_path
 
 
 def inference(route_request: RouteRequestModel):
 
     config_path = Path(r'ml_models/200/sample_config_200.json')
-    checkpoint_path = Path(r'ml_models/200/stage_200_RI1/best_model.pt')
+
+    checkpoint_path = get_model(route_request.route_type, route_request.rain_intensity)
 
     env, model, graph_source = load_env_and_model(config_path=config_path, checkpoint_path=checkpoint_path)
 
-    request:RouteRequestModel = route_request
-
-    print("Mock request: ", request)
+    request: RouteRequestModel = route_request
 
     depot_node, stop_nodes = map_request_to_nodes(env, request)
     initialize_env_for_request(
