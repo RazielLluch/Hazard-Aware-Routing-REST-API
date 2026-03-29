@@ -6,3 +6,5 @@ fastapi
 uvicorn
 pydantic
 slowapi
+networkx
+osmnx
