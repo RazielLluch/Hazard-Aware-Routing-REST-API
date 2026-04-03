@@ -1,0 +1,50 @@
+# Test your FastAPI endpoints
+
+### Generate OSM Route
+POST http://127.0.0.1:8000/route/generate_osm
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "dbdac1c1-28fa-438a-ac04-c1847692723b",
+  "rainIntensity": "RI3",
+  "routeType": "balanced",
+  "depot": {
+    "id": "depot",
+    "location": {
+      "lat": 16.4701966,
+      "lng": 120.5973433
+    },
+    "sequence": null,
+    "label": "Alapang"
+  },
+  "deliveryStops": [
+    {
+      "id": "stop-1",
+      "location": {
+        "lat": 16.4630252,
+        "lng": 120.6085442
+      },
+      "sequence": null,
+      "label": "Tomay"
+    },
+    {
+      "id": "stop-2",
+      "location": {
+        "lat": 16.4722423,
+        "lng": 120.6064993
+      },
+      "sequence": null,
+      "label": "Bahong Sunflower Farm"
+    },
+    {
+      "id": "stop-3",
+      "location": {
+        "lat": 16.460294,
+        "lng": 120.5967734
+      },
+      "sequence": null,
+      "label": "Mount Kalugong Cultural Village"
+    }
+  ]
+}
