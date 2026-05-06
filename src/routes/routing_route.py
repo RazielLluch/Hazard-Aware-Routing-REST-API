@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException, status, Path, Respo
 
 from ..services.inference import inference
 from ..services.mock_data import generate_mock_routes
+from ..services.route_post_processing import postprocess_route
 from ..utils.logging_decorator import log_endpoint
 
 api_router = APIRouter()
@@ -28,6 +29,7 @@ async def generate_osm_route(
 ):
 
     response = generate_mock_routes(request)
+    response = postprocess_route(RouteResponseModel.model_validate(response))
     return response
 
 
@@ -45,4 +47,5 @@ async def generate_route(
 
     response = inference(request)
     response = RouteResponseModel.model_validate(response)
+    response = postprocess_route(response)
     return response
