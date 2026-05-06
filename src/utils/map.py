@@ -49,34 +49,63 @@ def route_to_coordinates(G, route):
     return coords
 
 
+# def load_osm_network(location=LOCATION, network_type='all'):
+#     """
+#     Load OSM road network using OSMNX.
+#
+#     Parameters:
+#     -----------
+#     network_type : str
+#         Type of street network ('drive', 'walk', 'bike', 'all')
+#     """
+#
+#     try:
+#         G = ox.load_graphml(filepath="../../public/data/la_trinidad.graphml")
+#         print("Loaded La Trinidad, Benguet graphml file")
+#     except FileNotFoundError:
+#         print(f"Loading OSM network for {location}...")
+#         G = ox.graph_from_place(location, network_type=network_type, which_result=1, retain_all=False, simplify=True)
+#         G = ox.add_edge_bearings(G)
+#         # Ensure CRS is WGS84 for geographic coordinates
+#         G = ox.project_graph(G, to_crs='EPSG:4326')
+#
+#         ox.save_graphml(G, filepath="../../public/data/la_trinidad.graphml")
+#
+#         print(f"Loaded {len(G.nodes)} nodes and {len(G.edges)} edges")
+#
+#         # Get bounding box for reference
+#         # nodes_gdf = ox.graph_to_gdfs(G, edges=False)
+#         # osm_bounds = nodes_gdf.total_bounds
+#         # print(f"OSM network bounds: {osm_bounds}")
+#
+#     return G
+
 def load_osm_network(location=LOCATION, network_type='all'):
-    """
-    Load OSM road network using OSMNX.
-
-    Parameters:
-    -----------
-    network_type : str
-        Type of street network ('drive', 'walk', 'bike', 'all')
-    """
-
     try:
-        G = ox.load_graphml(filepath="../../public/data/la_trinidad.graphml")
+        G = ox.load_graphml(filepath="public/data/la_trinidad.graphml")
         print("Loaded La Trinidad, Benguet graphml file")
     except FileNotFoundError:
         print(f"Loading OSM network for {location}...")
-        G = ox.graph_from_place(location, network_type=network_type, which_result=1, retain_all=False, simplify=True)
+        G = ox.graph_from_place(
+            location,
+            network_type=network_type,
+            which_result=1,
+            retain_all=False,
+            simplify=True
+        )
         G = ox.add_edge_bearings(G)
-        # Ensure CRS is WGS84 for geographic coordinates
-        G = ox.project_graph(G, to_crs='EPSG:4326')
+        # Remove the project_graph call — graph is already in WGS84
 
-        ox.save_graphml(G, filepath="../../public/data/la_trinidad.graphml")
-
+        ox.save_graphml(G, filepath="public/data/la_trinidad.graphml")
         print(f"Loaded {len(G.nodes)} nodes and {len(G.edges)} edges")
 
-        # Get bounding box for reference
-        # nodes_gdf = ox.graph_to_gdfs(G, edges=False)
-        # osm_bounds = nodes_gdf.total_bounds
-        # print(f"OSM network bounds: {osm_bounds}")
+    # verify edge geometry
+
+    edges_with_geom = [(u, v, d) for u, v, d in G.edges(data=True) if 'geometry' in d]
+    edges_without_geom = [(u, v, d) for u, v, d in G.edges(data=True) if 'geometry' not in d]
+
+    print(f"Edges with geometry:    {len(edges_with_geom)}")
+    print(f"Edges without geometry: {len(edges_without_geom)}")
 
     return G
 
