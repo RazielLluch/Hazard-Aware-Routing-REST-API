@@ -1,7 +1,6 @@
 from functools import lru_cache
 
 import networkx as nx
-import osmnx as ox
 
 from ..core import paths
 from ..core.errors import NotFound
@@ -20,7 +19,10 @@ def load_graph(graph_id: str) -> nx.MultiDiGraph:
     path = paths.graph_path(graph_id)
     if not path.exists():
         raise NotFound(f"GraphML not found for graph_id={graph_id!r}: {path}")
-    return ox.load_graphml(path)
+    g = nx.read_graphml(str(path), force_multigraph=True)
+    if not isinstance(g, nx.MultiDiGraph):
+        g = nx.MultiDiGraph(g)
+    return g
 
 
 def get_graph_info(graph_id: str) -> GraphInfo:
