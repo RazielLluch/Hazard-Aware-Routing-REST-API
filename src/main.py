@@ -7,7 +7,11 @@ from src.api.v1 import router as v1_router
 from src.core.config import settings
 from src.core.errors import register_exception_handlers
 from src.core.logging import configure_logging, get_logger
-from src.routes.routing_route import api_router as legacy_router
+
+try:
+    from src.routes.routing_route import api_router as legacy_router
+except ImportError:
+    legacy_router = None
 
 
 @asynccontextmanager
@@ -41,7 +45,8 @@ app.add_middleware(
 register_exception_handlers(app)
 
 app.include_router(v1_router)
-app.include_router(legacy_router)
+if legacy_router is not None:
+    app.include_router(legacy_router)
 
 
 @app.get("/")
