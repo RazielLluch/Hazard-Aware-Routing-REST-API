@@ -9,16 +9,16 @@ _KNOWN_GRAPHS = {
 }
 
 
-def _cohorts_root() -> Path:
-    return settings.harness_root / "src" / "evaluation" / "cohorts"
+def _benchmarks_root() -> Path:
+    return settings.harness_root / "src" / "evaluation" / "benchmarks"
 
 
 def benchmark_dir(benchmark_id: str) -> Path:
-    return _cohorts_root() / benchmark_id
+    return _benchmarks_root() / benchmark_id
 
 
 def benchmark_metadata_path(benchmark_id: str) -> Path:
-    return benchmark_dir(benchmark_id) / "cohort.json"
+    return benchmark_dir(benchmark_id) / "benchmark.json"
 
 
 def scenarios_path(benchmark_id: str) -> Path:
@@ -26,7 +26,7 @@ def scenarios_path(benchmark_id: str) -> Path:
 
 
 def runs_dir(benchmark_id: str) -> Path:
-    return benchmark_dir(benchmark_id) / "routes"
+    return benchmark_dir(benchmark_id) / "runs"
 
 
 def run_path(benchmark_id: str, algorithm_id: str) -> Path:
@@ -55,14 +55,68 @@ def graph_path(graph_id: str) -> Path:
     return settings.graphs_root / _KNOWN_GRAPHS[graph_id]
 
 
-def list_known_benchmark_ids() -> list[str]:
-    cohorts_dir = _cohorts_root()
-    if not cohorts_dir.exists():
+# ---------------------------------------------------------------------------
+# Jobs
+# ---------------------------------------------------------------------------
+
+
+def jobs_root() -> Path:
+    return settings.harness_root / "data" / "jobs"
+
+
+def job_dir(job_id: str) -> Path:
+    return jobs_root() / job_id
+
+
+def job_manifest_path(job_id: str) -> Path:
+    return job_dir(job_id) / "job.json"
+
+
+def job_events_path(job_id: str) -> Path:
+    return job_dir(job_id) / "events.jsonl"
+
+
+def list_known_job_ids() -> list[str]:
+    root = jobs_root()
+    if not root.exists():
         return []
     return sorted(
-        p.name
-        for p in cohorts_dir.iterdir()
-        if p.is_dir() and (p / "cohort.json").exists()
+        p.name for p in root.iterdir()
+        if p.is_dir() and (p / "job.json").exists()
+    )
+
+
+# ---------------------------------------------------------------------------
+# Node bundles (per-graph saved (depot, stops) tuples)
+# ---------------------------------------------------------------------------
+
+
+def bundles_root() -> Path:
+    return settings.harness_root / "data" / "node_bundles"
+
+
+def bundle_dir(graph_id: str) -> Path:
+    return bundles_root() / graph_id
+
+
+def bundle_path(graph_id: str, name: str) -> Path:
+    return bundle_dir(graph_id) / f"{name}.json"
+
+
+def list_bundle_names(graph_id: str) -> list[str]:
+    d = bundle_dir(graph_id)
+    if not d.exists():
+        return []
+    return sorted(p.stem for p in d.iterdir() if p.is_file() and p.suffix == ".json")
+
+
+def list_known_benchmark_ids() -> list[str]:
+    root = _benchmarks_root()
+    if not root.exists():
+        return []
+    return sorted(
+        p.name for p in root.iterdir()
+        if p.is_dir() and (p / "benchmark.json").exists()
     )
 
 
