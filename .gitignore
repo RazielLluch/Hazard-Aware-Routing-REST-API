@@ -109,3 +109,7 @@ src/evaluation/cohorts/
 
 # Runtime artifacts written by the FastAPI /jobs flow
 data/jobs/
+
+# Smoke-test artifacts — failure reports + ad-hoc throwaway cohorts
+data/smoke_test_failures/
+data/benchmarks/smoke_*/
