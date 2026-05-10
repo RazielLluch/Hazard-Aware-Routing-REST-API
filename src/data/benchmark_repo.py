@@ -162,30 +162,56 @@ def get_run(benchmark_id: str, scenario_id: str, algorithm_id: str) -> Run:
         raise NotFound(
             f"Run not found: scenario_id={scenario_id!r}, algorithm_id={algorithm_id!r}"
         )
-    return _run_from_dict(record)
+    return _run_from_dict(record, _scenario_ri_map(benchmark_id))
 
 
 def list_run_summaries(benchmark_id: str, algorithm_id: str) -> list[RunSummary]:
     path = paths.run_path(benchmark_id, algorithm_id)
     if not path.exists():
         raise NotFound(f"Run file not found: {algorithm_id!r}")
-    return [_run_summary_from_dict(record) for record in stream_jsonl(path)]
+    ri_map = _scenario_ri_map(benchmark_id)
+    return [_run_summary_from_dict(record, ri_map) for record in stream_jsonl(path)]
 
 
 def list_runs_for_scenario(benchmark_id: str, scenario_id: str) -> list[RunSummary]:
     out: list[RunSummary] = []
+    ri_map = _scenario_ri_map(benchmark_id)
     for algo_id in _discover_algorithm_ids(benchmark_id):
         path = paths.run_path(benchmark_id, algo_id)
         record = find_record(path, lambda r: r.get("scenario_id") == scenario_id)
         if record:
-            out.append(_run_summary_from_dict(record))
+            out.append(_run_summary_from_dict(record, ri_map))
     return out
 
 
-def _run_summary_from_dict(record: dict[str, Any]) -> RunSummary:
+@lru_cache(maxsize=8)
+def _scenario_ri_map(benchmark_id: str) -> dict[str, str]:
+    """Map scenario_id to its RI level string for a given benchmark.
+
+    Cached because /benchmarks/{id}/runs/{algo} is hit once per algorithm
+    on the trial-list page, and we don't want to re-stream scenarios.jsonl
+    for every algorithm. Cache invalidates when the process restarts.
+    """
+    path = paths.scenarios_path(benchmark_id)
+    if not path.exists():
+        return {}
+    return {
+        rec["scenario_id"]: ri_from_int(int(rec["rain_level"]))
+        for rec in stream_jsonl(path)
+        if "scenario_id" in rec and "rain_level" in rec
+    }
+
+
+def _run_summary_from_dict(
+    record: dict[str, Any],
+    ri_map: dict[str, str] | None = None,
+) -> RunSummary:
+    scenario_id = record.get("scenario_id", "")
+    ri = (ri_map or {}).get(scenario_id)
     return RunSummary(
-        scenario_id=record.get("scenario_id", ""),
+        scenario_id=scenario_id,
         algorithm_id=record.get("algorithm_id", ""),  # type: ignore[arg-type]
+        ri=ri,  # type: ignore[arg-type]
         success=bool(record.get("success", False)),
         failure_reason=record.get("failure_reason"),
         replan_count=record.get("replan_count", 0),
@@ -193,7 +219,10 @@ def _run_summary_from_dict(record: dict[str, Any]) -> RunSummary:
     )
 
 
-def _run_from_dict(record: dict[str, Any]) -> Run:
+def _run_from_dict(
+    record: dict[str, Any],
+    ri_map: dict[str, str] | None = None,
+) -> Run:
     per_edge_raw = record.get("per_edge") or []
     per_edge = [
         RouteEdge(
@@ -205,12 +234,20 @@ def _run_from_dict(record: dict[str, Any]) -> Run:
             hazard_flood=e.get("hazard_flood", 0.0),
             hazard_landslide=e.get("hazard_landslide", 0.0),
             was_replan=bool(e.get("was_replan", False)),
+            planned_next_edge=(
+                tuple(e["planned_next_edge"])  # type: ignore[arg-type]
+                if e.get("planned_next_edge")
+                else None
+            ),
         )
         for i, e in enumerate(per_edge_raw)
     ]
+    scenario_id = record.get("scenario_id", "")
+    ri = (ri_map or {}).get(scenario_id)
     return Run(
-        scenario_id=record.get("scenario_id", ""),
+        scenario_id=scenario_id,
         algorithm_id=record.get("algorithm_id", ""),  # type: ignore[arg-type]
+        ri=ri,  # type: ignore[arg-type]
         algorithm_config_hash=record.get("algorithm_config_hash"),
         success=bool(record.get("success", False)),
         failure_reason=record.get("failure_reason"),

@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import Field
 
-from .common import AlgorithmId, CamelModel
+from .common import AlgorithmId, CamelModel, RILevel
 
 
 class RouteEdge(CamelModel):
@@ -23,6 +23,11 @@ class RouteEdge(CamelModel):
 class RunSummary(CamelModel):
     scenario_id: str
     algorithm_id: AlgorithmId
+    # Schema v3: surfaced from the parent scenario so the frontend can
+    # group a flat list of run summaries by RI without a second fetch.
+    # Optional only because the join may fail during backwards-compat
+    # reads against legacy v2 cohorts that lack a scenarios.jsonl entry.
+    ri: RILevel | None = None
     success: bool
     failure_reason: str | None = None
     replan_count: int = 0
