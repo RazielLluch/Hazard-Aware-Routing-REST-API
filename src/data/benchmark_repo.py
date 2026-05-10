@@ -40,10 +40,10 @@ def _load_benchmark(benchmark_id: str, *, summary_only: bool) -> BenchmarkSummar
     ri_dist = data.get("ri_distribution") or {}
 
     common_kwargs: dict[str, Any] = {
-        "benchmark_id": data.get("cohort_id", benchmark_id),
+        "benchmark_id": data.get("benchmark_id", benchmark_id),
         "graph_id": data.get("graph_id", ""),
-        "num_scenarios": data.get("num_scenarios", 0),
-        "num_deliveries": data.get("num_deliveries", 0),
+        "num_scenarios": data.get("n_scenarios", 0),
+        "num_deliveries": data.get("k_deliveries", 0),
         "algorithms": algorithms,
         "ri_distribution": RIDistribution(
             RI1=ri_dist.get("RI1", 0),
@@ -63,8 +63,8 @@ def _load_benchmark(benchmark_id: str, *, summary_only: bool) -> BenchmarkSummar
     return Benchmark(
         **common_kwargs,
         master_seed=data.get("master_seed", 0),
-        sampling_policy=data.get("sampling_policy", ""),
-        activation_mode=data.get("activation_mode", ""),
+        sampling_policy=data.get("sampler", ""),
+        activation_mode=data.get("activation_strategy", ""),
         feasibility_filtered=data.get("feasibility_filtered", False),
         graph_path=data.get("graph_path", ""),
         generated_at=generated_at,
