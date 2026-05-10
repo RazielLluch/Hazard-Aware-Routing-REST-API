@@ -14,6 +14,10 @@ class RouteEdge(CamelModel):
     hazard_flood: float = 0.0
     hazard_landslide: float = 0.0
     was_replan: bool = False
+    # Schema v3: when was_replan is true, this is the (u, v) edge the
+    # planner attempted before the block forced a replan. Optional for
+    # backward compat; legacy v2 routes have no such field.
+    planned_next_edge: tuple[str, str] | None = None
 
 
 class RunSummary(CamelModel):
