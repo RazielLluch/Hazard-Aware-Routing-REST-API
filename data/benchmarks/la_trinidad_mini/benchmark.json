@@ -1,0 +1,30 @@
+{
+  "activation_strategy": "deterministic_v3",
+  "benchmark_id": "la_trinidad_mini",
+  "feasibility_filtered": false,
+  "generated_at": "2026-05-11T03:16:42+08:00",
+  "graph_id": "la_trinidad_subgraph_n200",
+  "graph_path": "data\\graphs\\selected_subgraph_n200.graphml",
+  "k_deliveries": 5,
+  "longitudinal": true,
+  "master_seed": 42,
+  "n_evaluations": 100,
+  "n_scenarios": 20,
+  "rain_intensities": [
+    "RI1",
+    "RI2",
+    "RI3",
+    "RI4",
+    "RI5"
+  ],
+  "ri_distribution": {
+    "RI1": 20,
+    "RI2": 20,
+    "RI3": 20,
+    "RI4": 20,
+    "RI5": 20
+  },
+  "sampler": "uniform_open",
+  "scenarios_path": "scenarios.jsonl",
+  "schema_version": 2
+}
