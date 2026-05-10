@@ -127,6 +127,7 @@ def route(graph_id: str, request: InferenceRequest) -> InferenceResponse:
     return InferenceResponse(
         scenario_id=result_route.scenario_id,
         algorithm_id=result_route.algorithm_id,  # type: ignore[arg-type]
+        ri=ri_key,  # type: ignore[arg-type]
         success=result_route.success,
         failure_reason=result_route.failure_reason,
         replan_count=result_route.replan_count,
@@ -138,6 +139,10 @@ def route(graph_id: str, request: InferenceRequest) -> InferenceResponse:
         algorithm_config_hash=result_route.algorithm_config_hash,
         model_version=f"v3-{algorithm}",
         inference_ms=elapsed_ms,
+        graph_id=graph_id,
+        start_node=depot_node_id,
+        delivery_nodes=list(stop_node_ids),
+        blocked_edges=[(u, v) for u, v in blocked_edges],
     )
 
 

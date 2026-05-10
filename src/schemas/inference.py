@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from .common import AlgorithmId, CamelModel, LatLng, Profile
+from .common import AlgorithmId, CamelModel, LatLng, Profile, RILevel
 from .run import Run
 
 
@@ -21,6 +21,15 @@ class InferenceRequest(CamelModel):
 class InferenceResponse(Run):
     model_version: str
     inference_ms: float
+    # Schema v3: scenario context surfaced alongside the run so frontends
+    # (notably /demo) can render BlockedEdgesLayer + synthesise a Scenario
+    # for ScenarioPlaybackShell without a second fetch. Mirrors the subset
+    # of Scenario fields the playback shell actually consumes.
+    graph_id: str
+    ri: RILevel
+    start_node: str
+    delivery_nodes: list[str] = Field(default_factory=list)
+    blocked_edges: list[tuple[str, str]] = Field(default_factory=list)
 
 
 class InferenceHealth(CamelModel):
