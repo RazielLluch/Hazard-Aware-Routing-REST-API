@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from .common import CamelModel, LatLng, Profile
+from .common import AlgorithmId, CamelModel, LatLng, Profile
 from .run import Run
 
 
@@ -10,7 +10,12 @@ class InferenceRequest(CamelModel):
     depot: str | LatLng
     delivery_stops: list[str | LatLng] = Field(min_length=1, max_length=20)
     rain_level: Annotated[int, Field(ge=1, le=5)]
-    profile: Profile
+    # Schema v3: prefer `algorithm` for explicit policy choice. NNA-* algos
+    # are served live; DQN@* and `profile` short-circuit to 503 until the
+    # finalised DQN model lands. `profile` is preserved for the legacy
+    # /demo flow that was DQN-only.
+    algorithm: AlgorithmId | None = None
+    profile: Profile | None = None
 
 
 class InferenceResponse(Run):
