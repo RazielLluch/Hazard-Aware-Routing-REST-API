@@ -20,8 +20,8 @@ async def lifespan(app: FastAPI):
     log = get_logger("startup")
     log.info(
         "starting",
-        harness_root=str(settings.harness_root),
-        graphs_root=str(settings.graphs_root),
+        data_root=str(settings.data_root),
+        ml_models_root=str(settings.ml_models_root),
         models_root=str(settings.models_root),
     )
     yield

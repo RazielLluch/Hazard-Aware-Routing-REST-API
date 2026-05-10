@@ -20,15 +20,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    harness_root: AbsolutePath = Field(
-        default=Path("../../Benguet Flood and Landslide Data"),
-    )
-    graphs_root: AbsolutePath = Field(
-        default=Path("../../Benguet Flood and Landslide Data/data"),
-    )
-    models_root: AbsolutePath = Field(
-        default=Path("ml_models/latest"),
-    )
+    data_root: AbsolutePath = Field(default=Path("data"))
+    ml_models_root: AbsolutePath = Field(default=Path("ml_models"))
+    models_root: AbsolutePath = Field(default=Path("ml_models/latest"))
     allowed_origins: list[str] = Field(
         default=["http://localhost:3000", "http://127.0.0.1:3000"],
     )

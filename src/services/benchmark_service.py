@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from ..core.config import settings
+from ..core import paths
 from ..core.errors import NotFound
 from ..data import bundle_repo, job_repo
 from . import job_service
@@ -25,12 +25,13 @@ from . import job_service
 logger = logging.getLogger("services.benchmark")
 
 
-# Map the request graph_id back to a graphml path on disk. Mirrors entries
-# in core.paths._KNOWN_GRAPHS; we duplicate rather than import to keep the
+# Map the request graph_id back to a graphml path on disk, expressed
+# relative to the API repo root so subprocess argv works when cwd=API_ROOT.
+# Mirrors entries in core.paths._KNOWN_GRAPHS; duplicated to keep the
 # subprocess argv self-contained.
 _GRAPH_PATHS = {
-    "la_trinidad": "data/la_trinidad_hazard_graph.graphml",
-    "la_trinidad_subgraph_n200": "data/staged_subgraphs/selected_subgraph_n200.graphml",
+    "la_trinidad": "data/graphs/la_trinidad_hazard_graph.graphml",
+    "la_trinidad_subgraph_n200": "data/graphs/selected_subgraph_n200.graphml",
 }
 
 # Any one `_det` config works for scenario generation -- the rain_levels
@@ -63,8 +64,8 @@ def _run_pipeline(job_id: str, config: dict[str, Any]) -> None:
     if graph_id not in _GRAPH_PATHS:
         raise ValueError(f"Unknown graph_id: {graph_id!r}")
 
-    harness_root = settings.harness_root
-    benchmark_dir = harness_root / "src" / "evaluation" / "benchmarks" / benchmark_id
+    api_root = paths.project_root()
+    benchmark_dir = paths.benchmark_dir(benchmark_id)
 
     # Optional: resolve a saved bundle into --inject-depot / --inject-stops
     # CLI flags. Validates up-front so a missing or wrong-graph bundle fails
@@ -109,7 +110,7 @@ def _run_pipeline(job_id: str, config: dict[str, Any]) -> None:
     _run_subprocess(
         job_id,
         "scenario_gen",
-        cwd=harness_root,
+        cwd=api_root,
         argv=[
             sys.executable,
             "-m",
@@ -154,7 +155,7 @@ def _run_pipeline(job_id: str, config: dict[str, Any]) -> None:
     _run_subprocess(
         job_id,
         "run_policies",
-        cwd=harness_root,
+        cwd=api_root,
         argv=[
             sys.executable,
             "-m",
@@ -172,7 +173,7 @@ def _run_pipeline(job_id: str, config: dict[str, Any]) -> None:
     _run_subprocess(
         job_id,
         "evaluate",
-        cwd=harness_root,
+        cwd=api_root,
         argv=[
             sys.executable,
             "-m",

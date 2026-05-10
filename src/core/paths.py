@@ -5,12 +5,16 @@ from .config import settings
 
 _KNOWN_GRAPHS = {
     "la_trinidad": "la_trinidad_hazard_graph.graphml",
-    "la_trinidad_subgraph_n200": "staged_subgraphs/selected_subgraph_n200.graphml",
+    "la_trinidad_subgraph_n200": "selected_subgraph_n200.graphml",
 }
 
 
+def project_root() -> Path:
+    return settings.data_root.parent
+
+
 def _benchmarks_root() -> Path:
-    return settings.harness_root / "src" / "evaluation" / "benchmarks"
+    return settings.data_root / "benchmarks"
 
 
 def benchmark_dir(benchmark_id: str) -> Path:
@@ -52,7 +56,7 @@ def benchmark_cache_dir(benchmark_id: str) -> Path:
 def graph_path(graph_id: str) -> Path:
     if graph_id not in _KNOWN_GRAPHS:
         raise ValueError(f"Unknown graph_id: {graph_id!r}")
-    return settings.graphs_root / _KNOWN_GRAPHS[graph_id]
+    return settings.data_root / "graphs" / _KNOWN_GRAPHS[graph_id]
 
 
 # ---------------------------------------------------------------------------
@@ -61,7 +65,7 @@ def graph_path(graph_id: str) -> Path:
 
 
 def jobs_root() -> Path:
-    return settings.harness_root / "data" / "jobs"
+    return settings.data_root / "jobs"
 
 
 def job_dir(job_id: str) -> Path:
@@ -92,7 +96,7 @@ def list_known_job_ids() -> list[str]:
 
 
 def bundles_root() -> Path:
-    return settings.harness_root / "data" / "node_bundles"
+    return settings.data_root / "node_bundles"
 
 
 def bundle_dir(graph_id: str) -> Path:

@@ -99,3 +99,13 @@ out/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Vendored evaluation orphans (the inner benchmarks/ and cohorts/ trees were
+# copied alongside the modules during the harness vendor; the canonical
+# benchmark output now lives at data/benchmarks/. Keep these untracked
+# until Stage G physically removes them.)
+src/evaluation/benchmarks/
+src/evaluation/cohorts/
+
+# Runtime artifacts written by the FastAPI /jobs flow
+data/jobs/
