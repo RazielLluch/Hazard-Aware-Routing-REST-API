@@ -8,7 +8,6 @@ pydantic
 pydantic-settings
 python-dotenv
 structlog
-slowapi
 networkx
 osmnx
 numpy

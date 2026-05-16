@@ -15,9 +15,14 @@ dependencies = [
     "pytest>=9.0.3",
     "pytest-asyncio>=1.3.0",
     "python-dotenv>=1.2.2",
-    "slowapi>=0.1.9",
     "structlog>=25.5.0",
     "torch>=2.11.0",
     "torchvision>=0.26.0",
     "uvicorn>=0.46.0",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "v2: Macro-DDQN v2 bridge + /api/v2 tests (CI gate: uv run pytest -m v2)",
+    "macro: vendored macro-runner bridge tests",
 ]

@@ -5,6 +5,5 @@ torchvision
 fastapi
 uvicorn
 pydantic
-slowapi
 networkx
 osmnx
