@@ -3,15 +3,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.v1 import router as v1_router
+from src.api.v2 import router as v2_router
 from src.core.config import settings
 from src.core.errors import register_exception_handlers
 from src.core.logging import configure_logging, get_logger
-
-try:
-    from src.routes.routing_route import api_router as legacy_router
-except ImportError:
-    legacy_router = None
+from src.macro.bridge import bridge
 
 
 @asynccontextmanager
@@ -21,9 +17,11 @@ async def lifespan(app: FastAPI):
     log.info(
         "starting",
         data_root=str(settings.data_root),
-        ml_models_root=str(settings.ml_models_root),
-        models_root=str(settings.models_root),
+        macro_vendor_root=str(settings.macro_vendor_root),
     )
+    # Fail fast at boot if the vendored Macro-DDQN runner cannot be loaded.
+    bridge.load()
+    log.info("macro_bridge_ready", feature_count=len(bridge.feature_names()))
     yield
     log.info("shutdown")
 
@@ -42,11 +40,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 register_exception_handlers(app)
 
-app.include_router(v1_router)
-if legacy_router is not None:
-    app.include_router(legacy_router)
+app.include_router(v2_router)
 
 
 @app.get("/")
