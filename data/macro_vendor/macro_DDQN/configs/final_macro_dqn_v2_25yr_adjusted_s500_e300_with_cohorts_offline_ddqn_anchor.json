@@ -1,0 +1,217 @@
+{
+  "run_name": "final_macro_dqn_v2_25yr_adjusted_s500_e300_with_cohorts_offline_ddqn_anchor",
+  "seed": 2031,
+  "graph": {
+    "path": "map_preprocessing/data/la_trinidad_hazard_graph_v2_25yr.graphml",
+    "id": "la_trinidad_full_hazard_graph_v2_25yr_adjusted_thresholds",
+    "flood_attr": "flood_score",
+    "landslide_attr": "landslide_score",
+    "travel_time_attr": "base_time",
+    "length_attr": "length",
+    "manifest_path": "map_preprocessing/data/la_trinidad_hazard_graph_v2_25yr.manifest.json"
+  },
+  "scenario": {
+    "num_deliveries": 5,
+    "max_steps": 1000,
+    "ri_keys": [
+      "RI1",
+      "RI2",
+      "RI3",
+      "RI4",
+      "RI5"
+    ],
+    "sampling_mode": "full_graph_largest_component"
+  },
+  "hazard": {
+    "activation_model": "threshold_table_v3",
+    "normalization": {
+      "landslide_map": {
+        "0.3": 0.2
+      }
+    },
+    "risk_model": {
+      "distance_weighted": true,
+      "distance_unit_m": 1000.0,
+      "hazard_value_mode": "power",
+      "category_weights": {
+        "0.0": 0.0,
+        "0.2": 1.0,
+        "0.6": 4.0,
+        "1.0": 9.0
+      },
+      "flood_exponent": 2.0,
+      "landslide_exponent": 2.0,
+      "ri_risk_multipliers": {
+        "RI1": 1.0,
+        "RI2": 1.0,
+        "RI3": 1.0,
+        "RI4": 1.0,
+        "RI5": 1.0
+      }
+    },
+    "soft_blocking": {
+      "enabled": true,
+      "blockage_risk_multiplier": 40.0,
+      "blocked_time_multiplier": 7.0,
+      "plan_with_soft_blocks": true
+    },
+    "rain_levels": {
+      "RI1": {
+        "speed_mult": 1.0,
+        "flood_block_threshold": 1.1,
+        "flood_block_prob": 0.0,
+        "landslide_block_threshold": 1.1,
+        "landslide_block_prob": 0.0
+      },
+      "RI2": {
+        "speed_mult": 0.92,
+        "flood_block_threshold": 1.1,
+        "flood_block_prob": 0.0,
+        "landslide_block_threshold": 0.9,
+        "landslide_block_prob": 0.0
+      },
+      "RI3": {
+        "speed_mult": 0.84,
+        "flood_block_threshold": 1.1,
+        "flood_block_prob": 0.0,
+        "landslide_block_threshold": 0.8,
+        "landslide_block_prob": 0.0
+      },
+      "RI4": {
+        "speed_mult": 0.72,
+        "flood_block_threshold": 0.8,
+        "flood_block_prob": 0.0,
+        "landslide_block_threshold": 0.65,
+        "landslide_block_prob": 0.0
+      },
+      "RI5": {
+        "speed_mult": 0.58,
+        "flood_block_threshold": 0.6,
+        "flood_block_prob": 0.0,
+        "landslide_block_threshold": 0.6,
+        "landslide_block_prob": 0.0
+      }
+    },
+    "travel_time_drag": {
+      "alpha_flood": 1.0,
+      "alpha_landslide": 0.3
+    },
+    "activation_thresholds": {
+      "flood_active": {
+        "RI3": 0.7,
+        "RI4": 0.5,
+        "RI5": 0.2
+      },
+      "flood_block": {
+        "RI4": 0.8,
+        "RI5": 0.6
+      },
+      "landslide_active": {
+        "RI2": 0.8,
+        "RI3": 0.55,
+        "RI4": 0.2,
+        "RI5": 0.15
+      },
+      "landslide_block": {
+        "RI2": 0.9,
+        "RI3": 0.8,
+        "RI4": 0.65,
+        "RI5": 0.6
+      }
+    }
+  },
+  "profiles": {
+    "fast": {
+      "eta_time": 1.4,
+      "hazard_lambda": 1.0,
+      "w_flood": 0.5,
+      "w_landslide": 0.5,
+      "step_cost": 0.01
+    },
+    "balanced": {
+      "eta_time": 0.45,
+      "hazard_lambda": 8.0,
+      "w_flood": 0.5,
+      "w_landslide": 0.5,
+      "step_cost": 0.01
+    },
+    "safe": {
+      "eta_time": 0.08,
+      "hazard_lambda": 40.0,
+      "w_flood": 0.5,
+      "w_landslide": 0.5,
+      "step_cost": 0.01
+    }
+  },
+  "training": {
+    "scenarios_per_ri": 500,
+    "epochs": 45,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "hidden_sizes": [
+      224,
+      112,
+      56
+    ],
+    "validation_fraction": 0.15,
+    "early_stop_patience": 10
+  },
+  "evaluation": {
+    "scenarios_per_ri": 300,
+    "seed": 6131,
+    "cohorts": [
+      {
+        "name": "hazard_opportunity",
+        "ri_keys": [
+          "RI2",
+          "RI3",
+          "RI4",
+          "RI5"
+        ],
+        "scenarios_per_ri": 300,
+        "seed": 7211,
+        "sampling_mode": "hazard_opportunity",
+        "hazard_opportunity": {
+          "min_base_common_risk": 50.0,
+          "min_common_risk_delta": 10.0,
+          "attempt_multiplier": 200,
+          "allow_random_fallback": false
+        }
+      },
+      {
+        "name": "risk_time_tradeoff",
+        "ri_keys": [
+          "RI2",
+          "RI3",
+          "RI4",
+          "RI5"
+        ],
+        "scenarios_per_ri": 100,
+        "seed": 9137,
+        "sampling_mode": "hazard_opportunity",
+        "hazard_opportunity": {
+          "min_base_common_risk": 50.0,
+          "min_common_risk_delta": 10.0,
+          "min_time_penalty": 5.0,
+          "attempt_multiplier": 600,
+          "allow_random_fallback": false
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "artifact_dir": "macro_DQN_ddqn/artifacts/final_macro_dqn_v2_25yr_adjusted_s500_e300_with_cohorts_offline_ddqn_anchor"
+  },
+  "offline_ddqn": {
+    "enabled": true,
+    "epochs": 3,
+    "batch_size": 256,
+    "learning_rate": 0.0002,
+    "gamma": 1.0,
+    "target_update_every": 200,
+    "weight_decay": 0.0001,
+    "use_dp_anchor_loss": true,
+    "dp_anchor_alpha": 0.25,
+    "seed_offset": 777
+  }
+}

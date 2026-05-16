@@ -1,0 +1,4 @@
+profile,rows,label_mean,label_std,best_val_mse,best_epoch,model_path,seconds
+fast,412500,668.3624877929688,664.4882202148438,0.0009913425892591476,20,C:\Users\ASUS\Documents\- COLLEGE -\4th Year\2nd Sem\2nd Sem - Thesis\FINAL Thesis Code\macro_DQN_final_V3\artifacts\final_macro_dqn_v2_25yr_adjusted_s500_e300_with_cohorts\models\macro_dqn_fast.pt,790.0619548999239
+balanced,412500,1109.070556640625,1240.3946533203125,0.0007288670167326927,31,C:\Users\ASUS\Documents\- COLLEGE -\4th Year\2nd Sem\2nd Sem - Thesis\FINAL Thesis Code\macro_DQN_final_V3\artifacts\final_macro_dqn_v2_25yr_adjusted_s500_e300_with_cohorts\models\macro_dqn_balanced.pt,790.5283865999663
+safe,412500,4667.42138671875,5397.9326171875,0.0007069579442031682,25,C:\Users\ASUS\Documents\- COLLEGE -\4th Year\2nd Sem\2nd Sem - Thesis\FINAL Thesis Code\macro_DQN_final_V3\artifacts\final_macro_dqn_v2_25yr_adjusted_s500_e300_with_cohorts\models\macro_dqn_safe.pt,754.787840200006

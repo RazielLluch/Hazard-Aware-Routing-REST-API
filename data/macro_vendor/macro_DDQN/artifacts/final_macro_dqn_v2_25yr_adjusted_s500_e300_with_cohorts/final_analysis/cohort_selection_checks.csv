@@ -1,0 +1,4 @@
+cohort,n,base_minus_hazardaware_risk_mean,base_minus_hazardaware_risk_median,base_minus_hazardaware_risk_min,hazardaware_time_penalty_mean,hazardaware_time_penalty_median,hazardaware_time_penalty_min
+random,1200,107.311011,96.100579,-64.491793,-48.11406,-37.461434,-366.145896
+hazard_opportunity,1200,120.826342,107.459886,10.414985,-53.938475,-41.59944,-390.407092
+risk_time_tradeoff,400,42.849741,38.785994,10.449828,18.147531,14.78977,5.032231

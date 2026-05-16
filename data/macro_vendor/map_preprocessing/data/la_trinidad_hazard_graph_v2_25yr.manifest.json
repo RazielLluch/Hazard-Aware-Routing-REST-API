@@ -1,0 +1,131 @@
+{
+  "pipeline_version": "v2_exposure_blend",
+  "preprocessing_date": "2026-05-10T04:19:25+08:00",
+  "graphml": "data\\la_trinidad_hazard_graph_v2_25yr.graphml",
+  "source_mode": "existing_graph_straight_edge_reconstruction",
+  "sample_interval_meters": 10.0,
+  "aggregation": {
+    "flood_mean_weight": 0.65,
+    "flood_max_weight": 0.35,
+    "landslide_mean_weight": 0.5,
+    "landslide_max_weight": 0.5
+  },
+  "mappings": {
+    "flood": {
+      "1": 0.2,
+      "2": 0.6,
+      "3": 1.0
+    },
+    "landslide": {
+      "1": 0.2,
+      "2": 0.6,
+      "3": 1.0
+    }
+  },
+  "noah_sources": {
+    "flood": {
+      "path": "data\\raw\\noah\\flood_hazard\\Benguet_Flood_25year.shp",
+      "polygon_count": 3,
+      "classes_present": [
+        1,
+        2,
+        3
+      ]
+    },
+    "landslide": {
+      "path": "data\\raw\\noah\\landslide_susceptibility\\Benguet_LandslideHazards.shp",
+      "polygon_count": 3,
+      "classes_present": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  "stats": {
+    "name": "la_trinidad_hazard_graph_v2_25yr",
+    "source": "Benguet_Flood_25year.shp",
+    "nodes": 1447,
+    "edges": 3112,
+    "flood": {
+      "count": 3112,
+      "mean": 0.16741274614395887,
+      "max": 1.0,
+      "p50": 0.0,
+      "p75": 0.22268575000000002,
+      "p90": 0.6287781000000026,
+      "p95": 1.0,
+      "nonzero_count": 1104,
+      "nonzero_pct": 35.47557840616967,
+      "bins": {
+        "zero": 2008,
+        "(0,0.2]": 312,
+        "(0.2,0.6]": 478,
+        "(0.6,1.0]": 314
+      }
+    },
+    "landslide": {
+      "count": 3112,
+      "mean": 0.331957779562982,
+      "max": 1.0,
+      "p50": 0.3132355,
+      "p75": 0.5649949999999999,
+      "p90": 0.888889,
+      "p95": 1.0,
+      "nonzero_count": 1902,
+      "nonzero_pct": 61.11825192802056,
+      "bins": {
+        "zero": 1210,
+        "(0,0.2]": 344,
+        "(0.2,0.6]": 993,
+        "(0.6,1.0]": 565
+      }
+    },
+    "combined_mean": 0.49937052570694085,
+    "combined_p90": 1.0,
+    "any_hazard_count": 2542,
+    "any_hazard_pct": 81.68380462724936,
+    "blocking_preview": {
+      "RI1": {
+        "flood_eligible": 0,
+        "landslide_eligible": 0,
+        "union_eligible": 0,
+        "flood_eligible_pct": 0.0,
+        "landslide_eligible_pct": 0.0,
+        "union_eligible_pct": 0.0
+      },
+      "RI2": {
+        "flood_eligible": 188,
+        "landslide_eligible": 0,
+        "union_eligible": 188,
+        "flood_eligible_pct": 6.041131105398458,
+        "landslide_eligible_pct": 0.0,
+        "union_eligible_pct": 6.041131105398458
+      },
+      "RI3": {
+        "flood_eligible": 396,
+        "landslide_eligible": 0,
+        "union_eligible": 396,
+        "flood_eligible_pct": 12.724935732647815,
+        "landslide_eligible_pct": 0.0,
+        "union_eligible_pct": 12.724935732647815
+      },
+      "RI4": {
+        "flood_eligible": 396,
+        "landslide_eligible": 233,
+        "union_eligible": 601,
+        "flood_eligible_pct": 12.724935732647815,
+        "landslide_eligible_pct": 7.487146529562982,
+        "union_eligible_pct": 19.312339331619537
+      },
+      "RI5": {
+        "flood_eligible": 396,
+        "landslide_eligible": 716,
+        "union_eligible": 1068,
+        "flood_eligible_pct": 12.724935732647815,
+        "landslide_eligible_pct": 23.00771208226221,
+        "union_eligible_pct": 34.318766066838045
+      }
+    }
+  }
+}

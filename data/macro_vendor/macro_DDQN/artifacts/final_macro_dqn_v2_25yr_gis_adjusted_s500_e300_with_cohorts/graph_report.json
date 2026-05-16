@@ -1,0 +1,117 @@
+{
+  "degree_avg": 2.1610653138871276,
+  "degree_max": 4,
+  "directed_edges": 3366,
+  "edge_attributes": {
+    "base_time": {
+      "max": 6.520113187655589,
+      "mean": 0.28829588661145455,
+      "median": 0.1576908704722171,
+      "min": 0.0021422926502194066,
+      "nonzero": 1704
+    },
+    "combined_hazard": {
+      "max": 1.0,
+      "mean": 0.22942859812206576,
+      "median": 0.2,
+      "min": 0.0,
+      "nonzero": 1368
+    },
+    "flood_hazard": {
+      "max": 1.0,
+      "mean": 0.175541,
+      "median": 0.0,
+      "min": 0.0,
+      "nonzero": 583
+    },
+    "landslide_hazard": {
+      "max": 1.0,
+      "mean": 0.31025999530516435,
+      "median": 0.16125,
+      "min": 0.0,
+      "nonzero": 997
+    },
+    "length_m": {
+      "max": 3260.0565938277946,
+      "mean": 144.14794330572727,
+      "median": 78.84543523610856,
+      "min": 1.0711463251097033,
+      "nonzero": 1704
+    }
+  },
+  "mean_edge_time_min": 0.2895859526736708,
+  "nodes": 1577,
+  "rain_activation": {
+    "RI1": {
+      "activation_model": "threshold_table_v3",
+      "blocked_directed_edges": 0,
+      "blocked_undirected_edges": 0,
+      "fail_on_blocked_traversal": 0,
+      "flood_active_directed_edges": 0,
+      "flood_blocked_directed_edges": 0,
+      "hard_blocking_enabled": 0,
+      "landslide_active_directed_edges": 0,
+      "landslide_blocked_directed_edges": 0,
+      "largest_passable_component_nodes": 1577,
+      "passable_directed_edges": 3366,
+      "soft_planning_full_graph": 1
+    },
+    "RI2": {
+      "activation_model": "threshold_table_v3",
+      "blocked_directed_edges": 306,
+      "blocked_undirected_edges": 153,
+      "fail_on_blocked_traversal": 0,
+      "flood_active_directed_edges": 0,
+      "flood_blocked_directed_edges": 0,
+      "hard_blocking_enabled": 0,
+      "landslide_active_directed_edges": 415,
+      "landslide_blocked_directed_edges": 306,
+      "largest_passable_component_nodes": 600,
+      "passable_directed_edges": 3060,
+      "soft_planning_full_graph": 1
+    },
+    "RI3": {
+      "activation_model": "threshold_table_v3",
+      "blocked_directed_edges": 415,
+      "blocked_undirected_edges": 208,
+      "fail_on_blocked_traversal": 0,
+      "flood_active_directed_edges": 327,
+      "flood_blocked_directed_edges": 0,
+      "hard_blocking_enabled": 0,
+      "landslide_active_directed_edges": 855,
+      "landslide_blocked_directed_edges": 415,
+      "largest_passable_component_nodes": 554,
+      "passable_directed_edges": 2951,
+      "soft_planning_full_graph": 1
+    },
+    "RI4": {
+      "activation_model": "threshold_table_v3",
+      "blocked_directed_edges": 815,
+      "blocked_undirected_edges": 424,
+      "fail_on_blocked_traversal": 0,
+      "flood_active_directed_edges": 511,
+      "flood_blocked_directed_edges": 301,
+      "hard_blocking_enabled": 0,
+      "landslide_active_directed_edges": 1647,
+      "landslide_blocked_directed_edges": 543,
+      "largest_passable_component_nodes": 270,
+      "passable_directed_edges": 2551,
+      "soft_planning_full_graph": 1
+    },
+    "RI5": {
+      "activation_model": "threshold_table_v3",
+      "blocked_directed_edges": 1109,
+      "blocked_undirected_edges": 573,
+      "fail_on_blocked_traversal": 0,
+      "flood_active_directed_edges": 862,
+      "flood_blocked_directed_edges": 437,
+      "hard_blocking_enabled": 0,
+      "landslide_active_directed_edges": 1729,
+      "landslide_blocked_directed_edges": 715,
+      "largest_passable_component_nodes": 232,
+      "passable_directed_edges": 2257,
+      "soft_planning_full_graph": 1
+    }
+  },
+  "undirected_edges": 1704
+}
