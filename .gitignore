@@ -100,16 +100,6 @@ out/
 Thumbs.db
 desktop.ini
 
-# Vendored evaluation orphans (the inner benchmarks/ and cohorts/ trees were
-# copied alongside the modules during the harness vendor; the canonical
-# benchmark output now lives at data/benchmarks/. Keep these untracked
-# until Stage G physically removes them.)
-src/evaluation/benchmarks/
-src/evaluation/cohorts/
+# Runtime graph-export cache (regenerates on /api/v2/graph)
+data/cache/
 
-# Runtime artifacts written by the FastAPI /jobs flow
-data/jobs/
-
-# Smoke-test artifacts — failure reports + ad-hoc throwaway cohorts
-data/smoke_test_failures/
-data/benchmarks/smoke_*/
